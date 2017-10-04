@@ -1,7 +1,7 @@
 
 # Liftck - Service Util
 
-## Common utilities for the server-side micro-services  
+## Common utilities for the Lift server-side micro-services  
 *(Source Compatibility: 1.8 - Do not use with the player)*
 
 ### Gradle
