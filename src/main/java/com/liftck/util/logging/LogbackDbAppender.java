@@ -291,15 +291,26 @@ public class LogbackDbAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
          message = message.substring(0, MAX_MSGKEY_LENGTH);
       }
 
-      int endOfKeyIndex = message.indexOf('\n');
+      int endOfKeyIndex = message.indexOf(". ");
 
       if (endOfKeyIndex == -1)
       {
-         endOfKeyIndex = message.indexOf('\t');
+         endOfKeyIndex = message.indexOf(": ");
 
          if (endOfKeyIndex == -1)
          {
-            endOfKeyIndex = message.indexOf('.');
+            endOfKeyIndex = message.indexOf('-');
+            
+            if (endOfKeyIndex == -1)
+            {
+               endOfKeyIndex = message.indexOf('\n');
+               
+               if (endOfKeyIndex == -1)
+               {
+                  endOfKeyIndex = message.indexOf('\t');
+
+               }
+            }
          }
       }
 
