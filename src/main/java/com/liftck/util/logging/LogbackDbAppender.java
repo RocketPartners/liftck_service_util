@@ -281,8 +281,16 @@ public class LogbackDbAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
       return sb;
    }
 
+   /**
+    * Attempts to create a key from a given message.
+    * A key has a maximum length of MAX_MSGKEY_LENGTH
+    * @param message
+    * @return the shortest possible key or null if the message is null
+    */
    private String getMessageKey(String message)
    {
+      int MIN = 4;
+      int i = -1;
       if (message == null)
          return null;
 
@@ -291,28 +299,14 @@ public class LogbackDbAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
          message = message.substring(0, MAX_MSGKEY_LENGTH);
       }
 
-      int endOfKeyIndex = message.indexOf(". ");
-
-      if (endOfKeyIndex == -1)
-      {
-         endOfKeyIndex = message.indexOf(": ");
-
-         if (endOfKeyIndex == -1)
-         {
-            endOfKeyIndex = message.indexOf('-');
-            
-            if (endOfKeyIndex == -1)
-            {
-               endOfKeyIndex = message.indexOf('\n');
-               
-               if (endOfKeyIndex == -1)
-               {
-                  endOfKeyIndex = message.indexOf('\t');
-
-               }
-            }
-         }
-      }
+      int endOfKeyIndex = message.length();
+      endOfKeyIndex = findMessageKeyIndex(endOfKeyIndex, message, MIN, ". ");
+      endOfKeyIndex = findMessageKeyIndex(endOfKeyIndex, message, MIN, "=");
+      endOfKeyIndex = findMessageKeyIndex(endOfKeyIndex, message, MIN, ": ");
+      endOfKeyIndex = findMessageKeyIndex(endOfKeyIndex, message, MIN, "-");
+      endOfKeyIndex = findMessageKeyIndex(endOfKeyIndex, message, MIN, "\n");
+      endOfKeyIndex = findMessageKeyIndex(endOfKeyIndex, message, MIN, "\t");
+      endOfKeyIndex = findMessageKeyIndex(endOfKeyIndex, message, MIN, "**");
 
       if (endOfKeyIndex > 0)
       {
@@ -323,6 +317,17 @@ public class LogbackDbAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
          return message;
       }
 
+   }
+   
+   private int findMessageKeyIndex(int oldIndex, String message, int minIndex, String character) {
+      
+      int i = message.indexOf(character);
+      if (oldIndex > i && i > minIndex)
+      {
+         oldIndex = i;
+      }
+
+      return oldIndex;
    }
 
    public DataSource getDataSource()
