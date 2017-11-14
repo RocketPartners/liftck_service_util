@@ -292,7 +292,7 @@ public class LogbackDbAppender extends UnsynchronizedAppenderBase<ILoggingEvent>
       int MIN = 4;
       int i = -1;
       if (message == null)
-         return "";
+         return null;
 
       if (message.length() >= MAX_MSGKEY_LENGTH)
       {
