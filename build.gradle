@@ -3,7 +3,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 version = '0.0.1'
-group = 'liftck'
+group = 'com.github.RocketPartners'
 
 
 repositories {
