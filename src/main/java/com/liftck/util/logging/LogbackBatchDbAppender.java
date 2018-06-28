@@ -200,10 +200,14 @@ public class LogbackBatchDbAppender extends UnsynchronizedAppenderBase<ILoggingE
             }
 
             statement.close();
+            connection.close();
          }
          catch (Exception ex)
          {
             log.warn("Exception committing a batch of log events to the db.  These log events will be thrown away.", ex);
+         }
+         finally
+         {
             DBHelper.closeStatement(statement);
             DBHelper.closeConnection(connection);
          }
